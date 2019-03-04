@@ -1,3 +1,9 @@
+Fork From [alibaba/easyexcel](https://github.com/alibaba/easyexcel)， add some certain kinds of excel cell type Utils for formatted output.
+
+The Following is the original README.MD.
+
+
+
 # JAVA解析Excel工具easyexcel
 Java解析、生成Excel比较有名的框架有Apache poi、jxl。但他们都存在一个严重的问题就是非常的耗内存，poi有一套SAX模式的API可以一定程度的解决一些内存溢出的问题，但POI还是有一些缺陷，比如07版Excel解压缩以及解压后存储都是在内存中完成的，内存消耗依然很大。easyexcel重写了poi对07版Excel的解析，能够原本一个3M的excel用POI sax依然需要100M左右内存降低到KB级别，并且再大的excel不会出现内存溢出，03版依赖POI的sax模式。在上层做了模型转换的封装，让使用者更加简单方便
 ## 相关文档
@@ -142,10 +148,4 @@ public class Down {
     }
 }
 ```
-### 联系我们
-有问题阿里同事可以通过钉钉找到我，阿里外同学可以通过git留言。其他技术非技术相关的也欢迎一起探讨。
-### 招聘&交流
-阿里巴巴新零售事业部--诚招JAVA资深开发、技术专家。有意向可以微信联系，简历可以发我邮箱jipengfei.jpf@alibaba-inc.com
-或者加微信：18042000709
 
-<img src="https://github.com/alibaba/easyexcel/blob/master/img/WechatIMG8.png" width="30%" height="30%" />
