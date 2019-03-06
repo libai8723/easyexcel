@@ -3,6 +3,7 @@ package com.alibaba.excel.write;
 import com.alibaba.excel.context.WriteContext;
 import com.alibaba.excel.event.WriteHandler;
 import com.alibaba.excel.exception.ExcelGenerateException;
+import com.alibaba.excel.libai.LinkedValue;
 import com.alibaba.excel.metadata.BaseRowModel;
 import com.alibaba.excel.metadata.ExcelColumnProperty;
 import com.alibaba.excel.metadata.Sheet;
@@ -13,10 +14,16 @@ import com.alibaba.excel.util.POITempFile;
 import com.alibaba.excel.util.TypeUtil;
 import com.alibaba.excel.util.WorkBookUtil;
 import net.sf.cglib.beans.BeanMap;
+import org.apache.poi.common.usermodel.HyperlinkType;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Hyperlink;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFHyperlink;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -101,8 +108,25 @@ public class ExcelBuilderImpl implements ExcelBuilder {
         }
         for (int i = 0; i < oneRowData.size(); i++) {
             Object cellValue = oneRowData.get(i);
-            Cell cell = WorkBookUtil.createCell(row, i, context.getCurrentContentStyle(), cellValue,
-                TypeUtil.isNum(cellValue));
+            Cell cell = null;
+            if(cellValue instanceof LinkedValue){
+                XSSFCellStyle hLinkStyle = (XSSFCellStyle) context.getWorkbook().createCellStyle();
+                XSSFFont hLinkFont = (XSSFFont) context.getWorkbook().createFont();
+                hLinkFont.setUnderline(XSSFFont.U_SINGLE);
+                hLinkFont.setColor(HSSFColor.HSSFColorPredefined.BLUE.getIndex());
+                hLinkStyle.setFont(hLinkFont);
+                cell = WorkBookUtil.createCell(row, i, hLinkStyle, cellValue,
+                        TypeUtil.isNum(cellValue));
+                // 要根据不同的类型linkedValue来生成不同的Link类型
+                XSSFHyperlink link = (XSSFHyperlink)context.getWorkbook().getCreationHelper().createHyperlink(((LinkedValue) cellValue).getHyperlinkType());
+                // 根据LinkedValue的linkAddress来设置不同的link address
+                link.setAddress(((LinkedValue) cellValue).getLinkAddress());
+                cell.setHyperlink((XSSFHyperlink) link);
+                cell.setCellStyle(hLinkStyle);
+            }else {
+                cell = WorkBookUtil.createCell(row, i, context.getCurrentContentStyle(), cellValue,
+                        TypeUtil.isNum(cellValue));
+            }
             if (null != context.getAfterWriteHandler()) {
                 context.getAfterWriteHandler().cell(i, cell);
             }
