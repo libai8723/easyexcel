@@ -1,8 +1,10 @@
 package com.alibaba.easyexcel.test.util;
 
 import com.alibaba.easyexcel.test.model.WriteModel;
+import com.alibaba.excel.libai.LinkedValue;
 import com.alibaba.excel.metadata.Font;
 import com.alibaba.excel.metadata.TableStyle;
+import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.ss.usermodel.IndexedColors;
 
 import java.math.BigDecimal;
@@ -11,6 +13,48 @@ import java.util.Date;
 import java.util.List;
 
 public class DataUtil {
+
+    /**
+     * in order to test my own linked value cell format, generate some data
+     * @return
+     */
+    public static List<List<Object>> createTestLinkedValueObject(){
+        List<List<Object>> object = new ArrayList<List<Object>>();
+        for (int i = 0; i < 1000; i++) {
+            List<Object> da = new ArrayList<Object>();
+            da.add("字符串 "+i);
+            da.add(new LinkedValue("w3 portal", HyperlinkType.URL, "http://www.google.com"));
+            da.add(new LinkedValue("File Location at D:/1.txt", HyperlinkType.FILE, "D:/中文路径1/中文路径2/1.txt"));
+            da.add(new LinkedValue("email to libai", HyperlinkType.EMAIL, "mailto:libai8723@qq.com"));
+            object.add(da);
+        }
+        return object;
+    }
+
+    /**
+     * create 4 columns string header for libai's linked value cell format test
+     * @return
+     */
+    public static List<List<String>> create4ColumnsStringHead(){
+        List<List<String>> head = new ArrayList<List<String>>();
+        List<String> headCoulumn1 = new ArrayList<String>();
+        List<String> headCoulumn2 = new ArrayList<String>();
+        List<String> headCoulumn3 = new ArrayList<String>();
+        List<String> headCoulumn4 = new ArrayList<String>();
+
+        headCoulumn1.add("序号");
+        headCoulumn2.add("w3首页");
+        headCoulumn3.add("文件路径");
+        headCoulumn4.add("发邮件");
+
+
+        head.add(headCoulumn1);
+        head.add(headCoulumn2);
+        head.add(headCoulumn3);
+        head.add(headCoulumn4);
+
+        return head;
+    }
 
 
     public static List<List<Object>> createTestListObject() {
