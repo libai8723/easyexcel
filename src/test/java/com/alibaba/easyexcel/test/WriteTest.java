@@ -19,8 +19,30 @@ import static com.alibaba.easyexcel.test.util.DataUtil.*;
 public class WriteTest {
 
     @Test
+    public void libaiTestLinkedCellWriteV2007() throws IOException{
+        OutputStream out = new FileOutputStream("D:/2007.xlsx");
+        ExcelWriter writer = EasyExcelFactory.getWriter(out);
+        //写第一个sheet, sheet1  数据全是List<String> 无模型映射关系
+        Sheet sheet1 = new Sheet(1, 3);
+        sheet1.setSheetName("第一个sheet");
+
+        //设置列宽 设置每列的宽度
+        Map columnWidth = new HashMap();
+        columnWidth.put(0,5000);columnWidth.put(1,10000);columnWidth.put(2,10000);columnWidth.put(3,10000);
+        // sheet1.setColumnWidthMap(columnWidth);
+        sheet1.setHead(create4ColumnsStringHead());
+        //or 设置自适应宽度
+        sheet1.setAutoWidth(Boolean.TRUE);
+
+
+        writer.write1(createTestLinkedValueObject(), sheet1);
+        writer.finish();
+        out.close();
+    }
+
+    @Test
     public void writeV2007() throws IOException {
-        OutputStream out = new FileOutputStream("/Users/jipengfei/2007.xlsx");
+        OutputStream out = new FileOutputStream("D:/2007.xlsx");
         ExcelWriter writer = EasyExcelFactory.getWriter(out);
         //写第一个sheet, sheet1  数据全是List<String> 无模型映射关系
         Sheet sheet1 = new Sheet(1, 3);
@@ -65,7 +87,7 @@ public class WriteTest {
     @Test
     public void writeV2007WithTemplate() throws IOException {
         InputStream inputStream = FileUtil.getResourcesFileInputStream("temp.xlsx");
-        OutputStream out = new FileOutputStream("/Users/jipengfei/2007.xlsx");
+        OutputStream out = new FileOutputStream("D:/2007.xlsx");
         ExcelWriter writer = EasyExcelFactory.getWriterWithTemp(inputStream,out,ExcelTypeEnum.XLSX,true);
         //写第一个sheet, sheet1  数据全是List<String> 无模型映射关系
         Sheet sheet1 = new Sheet(1, 3);
@@ -109,7 +131,7 @@ public class WriteTest {
     @Test
     public void writeV2007WithTemplateAndHandler() throws IOException {
         InputStream inputStream = FileUtil.getResourcesFileInputStream("temp.xlsx");
-        OutputStream out = new FileOutputStream("/Users/jipengfei/2007.xlsx");
+        OutputStream out = new FileOutputStream("D:/2007.xlsx");
         ExcelWriter writer = EasyExcelFactory.getWriterWithTempAndHandler(inputStream,out,ExcelTypeEnum.XLSX,true,
             new AfterWriteHandlerImpl());
         //写第一个sheet, sheet1  数据全是List<String> 无模型映射关系
@@ -155,7 +177,7 @@ public class WriteTest {
 
     @Test
     public void writeV2003() throws IOException {
-        OutputStream out = new FileOutputStream("/Users/jipengfei/2003.xls");
+        OutputStream out = new FileOutputStream("D:/2007.xlsx");
         ExcelWriter writer = EasyExcelFactory.getWriter(out, ExcelTypeEnum.XLS,true);
         //写第一个sheet, sheet1  数据全是List<String> 无模型映射关系
         Sheet sheet1 = new Sheet(1, 3);
